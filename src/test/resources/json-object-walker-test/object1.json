@@ -1,0 +1,158 @@
+{
+  "birth_date": "2003-03-11",
+  "codeset": {
+    "id": 13,
+    "uid": "MNLRQ4YCYK-D"
+  },
+  "company_id": 41378,
+  "days_to_pay": null,
+  "employee_id": 1861903,
+  "employee_number": 1,
+  "employment_type_id": 1,
+  "first_name": "\u00d7\u0091\u00d7\u0093\u00d7\u0099\u00d7\u00a7\u00d7\u0094\u00d7\u0090t",
+  "foreign_resident": false,
+  "gender_id": 2,
+  "hire_date": "2016-08-16T00:00:00Z",
+  "immigration_date": "2007-03-29T00:00:00Z",
+  "income_tax": {
+    "calc_period_from_month": null,
+    "calc_type_id": 1,
+    "foreign_resident_tax_credits_type_id": null,
+    "job_type_id": 1,
+    "previous_working_month": null,
+    "calc_period_base_from_month": "2019-01",
+    "is_working_month": true,
+    "accrual_month": "2019-01",
+    "last_working_month": "2019-01",
+    "entitlement_type_id": 0
+  },
+  "kibbutz_member": null,
+  "last_name": "\u00d7\u0091\u00d7\u0093\u00d7\u0099\u00d7\u00a7\u00d7\u0094141tt",
+  "marital_status_id": 1,
+  "part_time_percentage": null,
+  "passport_id": null,
+  "payment_method_id": 0,
+  "regular_service": {
+    "end_date": "2018-01-09T00:00:00Z",
+    "total_months": 22
+  },
+  "single_parent": false,
+  "social_security": {
+    "job_type_id": 0
+  },
+  "solo_parent": false,
+  "spouse": {
+    "birth_date": "1968-03-04",
+    "disabled_person": null,
+    "employed": true,
+    "first_name": "fir",
+    "gender_id": 2,
+    "income_tax": {
+      "is_income_tax_retirement": false
+    },
+    "last_name": "fam",
+    "national_id": 124667757,
+    "previous_last_name": "prev",
+    "age": "P50Y10M6D",
+    "age_end_year": "P51Y9M27D"
+  },
+  "tax_credits": {
+    "alimony_spouse": {
+      "is_alimony_spouse": false,
+      "value": 0,
+      "accrual_amount": 0,
+      "actual_accrual_amount": 0,
+      "accrual_remainder": 0
+    },
+    "child_support": {
+      "is_child_support": false,
+      "value": 0,
+      "accrual_amount": 0,
+      "actual_accrual_amount": 0,
+      "accrual_remainder": 0
+    },
+    "discharged_soldier": {
+      "value": 0,
+      "accrual_amount": 0,
+      "actual_accrual_amount": 0,
+      "accrual_remainder": 0
+    },
+    "lacking_ability": {
+      "is_lacking_ability": true,
+      "value": 2,
+      "accrual_amount": 0,
+      "actual_accrual_amount": 0,
+      "accrual_remainder": 0
+    },
+    "new_immigrant": {
+      "value": 0,
+      "accrual_amount": 0,
+      "actual_accrual_amount": 0,
+      "accrual_remainder": 0
+    },
+    "resident": {
+      "value": 2.75,
+      "accrual_amount": 0,
+      "accrual_remainder": 0,
+      "actual_accrual_amount": 0
+    },
+    "single_parent": {
+      "value": 0,
+      "accrual_amount": 0,
+      "actual_accrual_amount": 0,
+      "accrual_remainder": 0
+    },
+    "teen_age": {
+      "value": 1,
+      "accrual_remainder": 0,
+      "accrual_amount": 0,
+      "actual_accrual_amount": 0
+    }
+  },
+  "termination_employment_date": null,
+  "work_days": null,
+  "work_hours": null,
+  "work_hours_supervised": null,
+  "employee_uid": "4BW3HW4TAF-1C690F",
+  "company_uid": "AM4GDDWCF8-A1A2",
+  "year_month": "2019-01",
+  "age": "P15Y9M30D",
+  "age_end_year": "P16Y9M20D",
+  "is_conditional_retirement": false,
+  "is_income_tax_retirement": false,
+  "is_retirement": false,
+  "kids": [
+		{
+			"id": 41,
+			"uid_prefix": "Y3NXPNE6WL",
+			"national_id": 1,
+			"first_name": "first_name",
+			"last_name": "last_name",
+			"birth_date": "2012-01-20",
+			"presumpt_of_parent": true,
+			"child_budget": true,
+			"employee_id": 44176,
+			"effective_date": "2018-01-01",
+			"expiration_date": "9999-01-01",
+			"solo_parent": true,
+			"claim_tax_credit": true,
+			"uid": "Y3NXPNE6WL-29"
+		},
+		{
+			"id": 42,
+			"uid_prefix": "uid_prefix",
+			"national_id": 1,
+			"first_name": "first_name",
+			"last_name": "last_name",
+			"birth_date": "2012-01-20",
+			"presumpt_of_parent": true,
+			"child_budget": true,
+			"employee_id": 44176,
+			"effective_date": "2018-01-01",
+			"expiration_date": "9999-01-01",
+			"solo_parent": true,
+			"claim_tax_credit": true,
+			"uid": "uid_prefix-30"
+		}
+	]
+}
