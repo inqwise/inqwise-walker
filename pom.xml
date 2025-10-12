@@ -9,7 +9,7 @@
 	
 	<groupId>com.inqwise</groupId>
 	<artifactId>inqwise-walker</artifactId>
-	<version>1.0.0</version>
+	<version>1.1.0-SNAPSHOT</version>
 	<description>A convenient and powerful object walker for Java, designed to traverse complex object graphs with ease. It provides a simple, event-driven API for navigating nested structures, making it ideal for data processing, validation, and transformation tasks.</description>
 	 <name>Inqwise Walker - Object Walker</name>
 	

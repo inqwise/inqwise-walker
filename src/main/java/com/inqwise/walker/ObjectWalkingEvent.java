@@ -2,8 +2,6 @@ package com.inqwise.walker;
 
 import java.util.Map;
 
-import javax.annotation.Nullable;
-
 /**
  * Event interface representing an object walking event.
  * 
@@ -47,9 +45,8 @@ public interface ObjectWalkingEvent {
 	 * 
 	 * <p>This is the actual object value that triggered this event during traversal.</p>
 	 * 
-	 * @return The object being processed
+	 * @return The object being processed, or null if no object is available
 	 */
-	@Nullable
 	Object indicatedObject();
 
 	/**
