@@ -4,9 +4,16 @@
 :source-highlighter: highlight.js
 :icons: font
 
-image:https://img.shields.io/badge/Java-21-orange.svg[Java 21]
-image:https://img.shields.io/badge/Maven-3.6.3-blue.svg[Maven]
+image:https://github.com/inqwise/inqwise-walker/actions/workflows/ci.yml/badge.svg[CI Status, link=https://github.com/inqwise/inqwise-walker/actions/workflows/ci.yml]
+image:https://snyk.io/test/github/inqwise/inqwise-walker/badge.svg[Known Vulnerabilities, link=https://snyk.io/test/github/inqwise/inqwise-walker]
+image:https://codecov.io/gh/inqwise/inqwise-walker/branch/main/graph/badge.svg[Code Coverage, link=https://codecov.io/gh/inqwise/inqwise-walker]
+image:https://img.shields.io/badge/Java-21+-orange.svg[Java 21+]
+image:https://img.shields.io/badge/Maven-3.6.3+-blue.svg[Maven]
+image:https://img.shields.io/github/v/release/inqwise/inqwise-walker[Latest Release, link=https://github.com/inqwise/inqwise-walker/releases]
 image:https://img.shields.io/badge/License-MIT-green.svg[MIT License, link=https://opensource.org/licenses/MIT]
+image:https://img.shields.io/github/issues/inqwise/inqwise-walker[Issues, link=https://github.com/inqwise/inqwise-walker/issues]
+image:https://img.shields.io/github/forks/inqwise/inqwise-walker[Forks, link=https://github.com/inqwise/inqwise-walker/network/members]
+image:https://img.shields.io/github/stars/inqwise/inqwise-walker[Stars, link=https://github.com/inqwise/inqwise-walker/stargazers]
 
 A powerful and flexible Java library for traversing complex object hierarchies with event-driven processing.
 
@@ -33,7 +40,7 @@ Inqwise Walker provides a framework for walking through object structures with c
 <dependency>
     <groupId>com.inqwise</groupId>
     <artifactId>inqwise-walker</artifactId>
-    <version>1.0.0</version>
+    <version>1.1.0</version>
 </dependency>
 ----
 
