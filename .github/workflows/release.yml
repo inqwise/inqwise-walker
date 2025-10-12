@@ -1,0 +1,227 @@
+name: Release
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release version (e.g., 1.2.0, patch, minor, major)'
+        required: false
+        default: 'patch'
+
+jobs:
+  check-changes:
+    name: Check for Release-worthy Changes
+    runs-on: ubuntu-latest
+    outputs:
+      should-release: ${{ steps.check.outputs.should-release }}
+      new-version: ${{ steps.version.outputs.new-version }}
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        
+    - name: Check for conventional commits
+      id: check
+      run: |
+        # Check if there are any feat: or fix: commits since last tag
+        LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
+        if [ -z "$LAST_TAG" ]; then
+          echo "No previous tags found, will create initial release"
+          echo "should-release=true" >> $GITHUB_OUTPUT
+        else
+          COMMITS=$(git log ${LAST_TAG}..HEAD --oneline --grep="^feat:" --grep="^fix:" --grep="^BREAKING CHANGE:" -E)
+          if [ -n "$COMMITS" ]; then
+            echo "Found release-worthy commits since $LAST_TAG"
+            echo "should-release=true" >> $GITHUB_OUTPUT
+          else
+            echo "No release-worthy commits found since $LAST_TAG"
+            echo "should-release=false" >> $GITHUB_OUTPUT
+          fi
+        fi
+        
+    - name: Determine next version
+      id: version
+      if: steps.check.outputs.should-release == 'true'
+      run: |
+        # Get current version from pom.xml
+        CURRENT_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout | sed 's/-SNAPSHOT//')
+        
+        # Determine version bump type
+        if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+          VERSION_INPUT="${{ github.event.inputs.version }}"
+          if [[ "$VERSION_INPUT" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            NEW_VERSION="$VERSION_INPUT"
+          else
+            # Calculate semantic version bump
+            case "$VERSION_INPUT" in
+              "major")
+                NEW_VERSION=$(echo $CURRENT_VERSION | awk -F. '{print ($1+1)".0.0"}')
+                ;;
+              "minor")
+                NEW_VERSION=$(echo $CURRENT_VERSION | awk -F. '{print $1"."($2+1)".0"}')
+                ;;
+              "patch"|*)
+                NEW_VERSION=$(echo $CURRENT_VERSION | awk -F. '{print $1"."$2"."($3+1)}')
+                ;;
+            esac
+          fi
+        else
+          # Auto-detect version bump from commit messages
+          LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
+          if git log ${LAST_TAG}..HEAD --oneline | grep -q "BREAKING CHANGE:"; then
+            NEW_VERSION=$(echo $CURRENT_VERSION | awk -F. '{print ($1+1)".0.0"}')
+          elif git log ${LAST_TAG}..HEAD --oneline | grep -q "^feat:"; then
+            NEW_VERSION=$(echo $CURRENT_VERSION | awk -F. '{print $1"."($2+1)".0"}')
+          else
+            NEW_VERSION=$(echo $CURRENT_VERSION | awk -F. '{print $1"."$2"."($3+1)}')
+          fi
+        fi
+        
+        echo "new-version=$NEW_VERSION" >> $GITHUB_OUTPUT
+        echo "Next version will be: $NEW_VERSION"
+
+  create-release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    needs: check-changes
+    if: needs.check-changes.outputs.should-release == 'true'
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        token: ${{ secrets.GITHUB_TOKEN }}
+        
+    - name: Set up JDK 21
+      uses: actions/setup-java@v4
+      with:
+        java-version: 21
+        distribution: 'temurin'
+        
+    - name: Cache Maven dependencies
+      uses: actions/cache@v4
+      with:
+        path: ~/.m2
+        key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+        restore-keys: ${{ runner.os }}-m2
+        
+    - name: Configure Git
+      run: |
+        git config user.name "github-actions[bot]"
+        git config user.email "github-actions[bot]@users.noreply.github.com"
+        
+    - name: Update version in pom.xml
+      run: |
+        NEW_VERSION="${{ needs.check-changes.outputs.new-version }}"
+        mvn versions:set -DnewVersion=$NEW_VERSION -DgenerateBackupPoms=false
+        
+    - name: Update README version
+      run: |
+        NEW_VERSION="${{ needs.check-changes.outputs.new-version }}"
+        sed -i.bak "s/<version>[0-9]\+\.[0-9]\+\.[0-9]\+<\/version>/<version>$NEW_VERSION<\/version>/g" README.adoc
+        rm README.adoc.bak 2>/dev/null || true
+        
+    - name: Generate changelog
+      id: changelog
+      run: |
+        NEW_VERSION="${{ needs.check-changes.outputs.new-version }}"
+        LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
+        
+        echo "# Release Notes for v$NEW_VERSION" > RELEASE_NOTES.md
+        echo "" >> RELEASE_NOTES.md
+        echo "## Changes" >> RELEASE_NOTES.md
+        
+        if [ -z "$LAST_TAG" ]; then
+          echo "- Initial release of inqwise-walker" >> RELEASE_NOTES.md
+          echo "- Event-driven object traversal framework" >> RELEASE_NOTES.md
+          echo "- Support for JSON Objects and Arrays" >> RELEASE_NOTES.md
+          echo "- Extensible walker architecture" >> RELEASE_NOTES.md
+          echo "- Flow control (pause/resume/terminate)" >> RELEASE_NOTES.md
+          echo "- Path tracking and context data sharing" >> RELEASE_NOTES.md
+        else
+          # Generate changelog from commits
+          git log ${LAST_TAG}..HEAD --pretty=format:"- %s" --grep="^feat:" --grep="^fix:" --grep="^perf:" --grep="^refactor:" -E >> RELEASE_NOTES.md
+        fi
+        
+        echo "" >> RELEASE_NOTES.md
+        echo "## Installation" >> RELEASE_NOTES.md
+        echo "" >> RELEASE_NOTES.md
+        echo '```xml' >> RELEASE_NOTES.md
+        echo "<dependency>" >> RELEASE_NOTES.md
+        echo "    <groupId>com.inqwise</groupId>" >> RELEASE_NOTES.md
+        echo "    <artifactId>inqwise-walker</artifactId>" >> RELEASE_NOTES.md
+        echo "    <version>$NEW_VERSION</version>" >> RELEASE_NOTES.md
+        echo "</dependency>" >> RELEASE_NOTES.md
+        echo '```' >> RELEASE_NOTES.md
+        
+        # Set multiline output
+        echo 'changelog<<EOF' >> $GITHUB_OUTPUT
+        cat RELEASE_NOTES.md >> $GITHUB_OUTPUT
+        echo 'EOF' >> $GITHUB_OUTPUT
+        
+    - name: Build and test
+      run: mvn clean compile test package -B
+      
+    - name: Generate Javadocs
+      run: mvn javadoc:jar -B
+      
+    - name: Generate sources JAR
+      run: mvn source:jar -B
+      
+    - name: Commit version changes
+      run: |
+        NEW_VERSION="${{ needs.check-changes.outputs.new-version }}"
+        git add pom.xml README.adoc
+        git commit -m "chore: bump version to $NEW_VERSION"
+        git tag -a "v$NEW_VERSION" -m "Release v$NEW_VERSION"
+        
+    - name: Push changes and tags
+      run: |
+        git push origin main
+        git push origin --tags
+        
+    - name: Create GitHub Release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: v${{ needs.check-changes.outputs.new-version }}
+        release_name: Release v${{ needs.check-changes.outputs.new-version }}
+        body: ${{ steps.changelog.outputs.changelog }}
+        draft: false
+        prerelease: false
+        
+    - name: Upload JAR artifact
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: target/inqwise-walker-${{ needs.check-changes.outputs.new-version }}.jar
+        asset_name: inqwise-walker-${{ needs.check-changes.outputs.new-version }}.jar
+        asset_content_type: application/java-archive
+        
+    - name: Upload Sources JAR
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: target/inqwise-walker-${{ needs.check-changes.outputs.new-version }}-sources.jar
+        asset_name: inqwise-walker-${{ needs.check-changes.outputs.new-version }}-sources.jar
+        asset_content_type: application/java-archive
+        
+    - name: Upload Javadocs JAR
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: target/inqwise-walker-${{ needs.check-changes.outputs.new-version }}-javadoc.jar
+        asset_name: inqwise-walker-${{ needs.check-changes.outputs.new-version }}-javadoc.jar
+        asset_content_type: application/java-archive
