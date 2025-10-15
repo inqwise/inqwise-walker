@@ -197,7 +197,7 @@ jobs:
         args: --severity-threshold=medium --file=pom.xml
         
     - name: Upload Snyk results to GitHub Code Scanning (Free)
-      uses: github/codeql-action/upload-sarif@v3
+      uses: github/codeql-action/upload-sarif@v4
       if: always() && env.SNYK_TOKEN != ''
       with:
         sarif_file: snyk.sarif
