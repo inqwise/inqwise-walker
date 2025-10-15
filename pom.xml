@@ -259,8 +259,7 @@
 					</filesets>
 				</configuration>
 			</plugin>
-			<!-- JaCoCo Plugin for Code Coverage -->
-			<!-- Temporarily disabled JaCoCo plugin due to version conflicts -->
+			<!-- JaCoCo Plugin for Code Coverage - Temporarily disabled due to Java 21 compatibility issues -->
 			<!--<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>

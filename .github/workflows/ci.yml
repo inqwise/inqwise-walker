@@ -36,13 +36,13 @@ jobs:
     - name: Run tests
       run: mvn clean test -B
         
-    - name: Upload coverage to Codecov
+    - name: Upload coverage reports to Codecov
       if: matrix.java == '21'
       uses: codecov/codecov-action@v5
       with:
-        file: target/site/jacoco/jacoco.xml
+        token: ${{ secrets.CODECOV_TOKEN }}
         fail_ci_if_error: false
-        verbose: false
+        verbose: true
 
   code-quality:
     name: Code Quality Analysis
