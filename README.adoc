@@ -40,7 +40,7 @@ Inqwise Walker provides a framework for walking through object structures with c
 <dependency>
     <groupId>com.inqwise</groupId>
     <artifactId>inqwise-walker</artifactId>
-    <version>1.1.1</version>
+    <version>${latest.version}</version>
 </dependency>
 ----
 
@@ -344,18 +344,6 @@ This project is licensed under the MIT License - see the link:LICENSE[LICENSE] f
 * **Documentation**: Check this README and the link:WalkerUsageExample.java[usage examples]
 * **Issues**: Report bugs and request features on link:https://github.com/inqwise/inqwise-walker/issues[GitHub Issues]
 * **Discussions**: Ask questions on link:https://github.com/inqwise/inqwise-walker/discussions[GitHub Discussions]
-
-== Changelog
-
-=== Version 1.0.0
-* Initial release
-* Core walking framework
-* Built-in JSON walkers
-* Event-driven processing
-* Flow control features
-* Context data sharing
-* Error handling
-* Comprehensive test suite
 
 ---
 
