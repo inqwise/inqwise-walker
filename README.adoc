@@ -4,16 +4,13 @@
 :source-highlighter: highlight.js
 :icons: font
 
-image:https://github.com/inqwise/inqwise-walker/actions/workflows/ci.yml/badge.svg[CI Status, link=https://github.com/inqwise/inqwise-walker/actions/workflows/ci.yml]
-image:https://snyk.io/test/github/inqwise/inqwise-walker/badge.svg[Known Vulnerabilities, link=https://snyk.io/test/github/inqwise/inqwise-walker]
-image:https://codecov.io/gh/inqwise/inqwise-walker/branch/main/graph/badge.svg[Code Coverage, link=https://codecov.io/gh/inqwise/inqwise-walker]
-image:https://img.shields.io/badge/Java-21+-orange.svg[Java 21+]
-image:https://img.shields.io/badge/Maven-3.6.3+-blue.svg[Maven]
-image:https://img.shields.io/github/v/release/inqwise/inqwise-walker[Latest Release, link=https://github.com/inqwise/inqwise-walker/releases]
-image:https://img.shields.io/badge/License-MIT-green.svg[MIT License, link=https://opensource.org/licenses/MIT]
-image:https://img.shields.io/github/issues/inqwise/inqwise-walker[Issues, link=https://github.com/inqwise/inqwise-walker/issues]
-image:https://img.shields.io/github/forks/inqwise/inqwise-walker[Forks, link=https://github.com/inqwise/inqwise-walker/network/members]
-image:https://img.shields.io/github/stars/inqwise/inqwise-walker[Stars, link=https://github.com/inqwise/inqwise-walker/stargazers]
+image:https://github.com/inqwise/inqwise-walker/actions/workflows/ci.yml/badge.svg[CI, link=https://github.com/inqwise/inqwise-walker/actions/workflows/ci.yml]
+image:https://github.com/inqwise/inqwise-walker/actions/workflows/release.yml/badge.svg[Release, link=https://github.com/inqwise/inqwise-walker/actions/workflows/release.yml]
+image:https://github.com/inqwise/inqwise-walker/actions/workflows/codeql.yml/badge.svg[CodeQL, link=https://github.com/inqwise/inqwise-walker/actions/workflows/codeql.yml]
+image:https://snyk.io/test/github/inqwise/inqwise-walker/badge.svg[Snyk Security, link=https://snyk.io/test/github/inqwise/inqwise-walker]
+image:https://img.shields.io/maven-central/v/com.inqwise/inqwise-walker.svg?label=Maven%20Central[Maven Central, link=https://search.maven.org/search?q=g:%22com.inqwise%22%20AND%20a:%22inqwise-walker%22]
+image:https://img.shields.io/badge/License-MIT-yellow.svg[License: MIT, link=https://opensource.org/licenses/MIT]
+image:https://img.shields.io/badge/Java-21%2B-blue.svg[Java Version, link=https://openjdk.java.net/projects/jdk/21/]
 
 A powerful and flexible Java library for traversing complex object hierarchies with event-driven processing.
 
@@ -319,12 +316,12 @@ mvn exec:java -Dexec.mainClass="com.inqwise.walker.example.WalkerUsageExample"
 
 The library has minimal runtime dependencies:
 
-* **Vert.x Core** (4.5.10) - For JSON processing (provided scope)
+* **Vert.x Core** (5.0.4) - For JSON processing (provided scope)
 * **Google Guava** (33.4.0-jre) - For collections utilities (provided scope)
-* **Apache Log4j** (2.22.1) - For logging (api required, core provided)
-* **Inqwise Difference** (1.0.0) - For difference processing (provided scope)
+* **Apache Log4j** (2.25.2) - For logging (api required, core provided)
+* **Inqwise Difference** (1.1.6) - For difference processing (provided scope)
 
-Test dependencies include JUnit 5 and Vert.x test utilities.
+Test dependencies include JUnit 5.11.3 and Vert.x test utilities.
 
 == Contributing
 
