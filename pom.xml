@@ -51,7 +51,7 @@
 		<maven-flatten-plugin.version>1.6.0</maven-flatten-plugin.version>
 		<maven.gpg.plugin.version>3.2.8</maven.gpg.plugin.version>
 		<maven.javadoc.plugin.version>3.12.0</maven.javadoc.plugin.version>
-		<jacoco.plugin.version>0.8.12</jacoco.plugin.version>
+		<jacoco.plugin.version>0.8.13</jacoco.plugin.version>
 		
 		<log4j2.version>2.25.2</log4j2.version>
 		<vertx.version>5.0.4</vertx.version>
@@ -203,7 +203,7 @@
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>3.5.4</version>
 				<configuration>
-					<argLine>--illegal-access=permit -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory</argLine>
+					<argLine>@{argLine} --illegal-access=permit -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory</argLine>
 				</configuration>
 				<dependencies>
 					<dependency>
@@ -259,8 +259,8 @@
 					</filesets>
 				</configuration>
 			</plugin>
-			<!-- JaCoCo Plugin for Code Coverage - Temporarily disabled due to Java 21 compatibility issues -->
-			<!--<plugin>
+			<!-- JaCoCo Plugin for Code Coverage -->
+			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
 				<version>${jacoco.plugin.version}</version>
@@ -278,7 +278,7 @@
 						</goals>
 					</execution>
 				</executions>
-			</plugin>-->
+			</plugin>
 			<!-- Maven Release Plugin -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
