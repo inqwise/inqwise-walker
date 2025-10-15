@@ -152,11 +152,24 @@ jobs:
         restore-keys: ${{ runner.os }}-m2
         
     - name: Run OWASP dependency check
+      env:
+        NVD_API_KEY: ${{ secrets.NVD_API_KEY }}
       run: |
-        mvn org.owasp:dependency-check-maven:check -B \
-          -DfailBuildOnCVSS=7 \
-          -Dformat=ALL \
-          || echo "Dependency check completed with warnings"
+        if [ -n "$NVD_API_KEY" ]; then
+          echo "Using NVD API key for faster updates"
+          mvn org.owasp:dependency-check-maven:check -B \
+            -DfailBuildOnCVSS=7 \
+            -Dformat=ALL \
+            -DnvdApiKey="$NVD_API_KEY" \
+            || echo "Dependency check completed with warnings"
+        else
+          echo "Warning: NVD API key not provided - update may take a very long time"
+          echo "Consider adding NVD_API_KEY secret for faster dependency checking"
+          mvn org.owasp:dependency-check-maven:check -B \
+            -DfailBuildOnCVSS=7 \
+            -Dformat=ALL \
+            || echo "Dependency check completed with warnings"
+        fi
         
     - name: Upload OWASP dependency check results
       uses: actions/upload-artifact@v4
