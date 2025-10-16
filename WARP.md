@@ -153,16 +153,16 @@ walker.endHandler(context -> {
 ## Dependencies
 
 The library uses provided scope for most dependencies to avoid version conflicts:
-- **Vert.x Core** (4.5.10): JSON processing support  
+- **Vert.x Core** (5.0.4): JSON processing support  
 - **Google Guava** (33.4.0-jre): Collections utilities
-- **Apache Log4j** (2.22.1): Logging framework
-- **Inqwise Difference** (1.0.0): Difference processing support
+- **Apache Log4j** (2.25.2): Logging framework
+- **Inqwise Difference** (1.1.6): Difference processing support
 
 ## Project Rules & Conventions
 
 Based on user rules, this project:
 - Follows Inqwise's event-driven, reactive architecture principles
-- Uses Vert.x 5 core tools (note: pom.xml shows 4.5.10, may need updating)
+- Uses Vert.x 5 core tools (version 5.0.4 in pom.xml)
 - Implements micro-kernel design with plugin-based provider modules
 - Should commit changes on a daily basis for the entire project rather than after individual tasks
 

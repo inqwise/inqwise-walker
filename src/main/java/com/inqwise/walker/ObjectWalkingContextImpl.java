@@ -177,7 +177,7 @@ public class ObjectWalkingContextImpl implements ObjectWalkingContext {
 	 * 
 	 * @return true if there are more items to process at the current level, false otherwise
 	 */
-	boolean stepNext() {
+	synchronized boolean stepNext() {
 		var currentLevel = currentLevel();
 		var currentLevelIterator = currentLevel().iterator();
 		logger.trace("stepNext ended:{}, paused:{}, hasNext:{}", ended(), paused(), currentLevelIterator.hasNext());
@@ -413,7 +413,7 @@ public class ObjectWalkingContextImpl implements ObjectWalkingContext {
 	 * @return This context instance for method chaining
 	 */
 	@Override
-	public ObjectWalkingContext pause() {
+	public synchronized ObjectWalkingContext pause() {
 		logger.trace("pause");
 		this.paused = true;
 		return this;
@@ -426,7 +426,7 @@ public class ObjectWalkingContextImpl implements ObjectWalkingContext {
 	 * If the context is not paused, this method has no effect.</p>
 	 */
 	@Override
-	public void resume() {
+	public synchronized void resume() {
 		logger.trace("resume");
 		this.paused = false;
 		next();

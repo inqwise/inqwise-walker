@@ -429,7 +429,6 @@ class VertxJsonObjectWalkerTest {
         
         jsonWalker.handler(event -> {
             processedCount.incrementAndGet();
-            String path = event.meta().get(ObjectWalker.Keys.PATH).toString();
             
             // End walking after processing 10 items
             if (processedCount.get() >= 10) {

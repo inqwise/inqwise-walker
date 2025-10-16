@@ -119,4 +119,4 @@ Security updates are distributed through:
 
 ---
 
-*This security policy was last updated: December 2024*
+*This security policy was last updated: October 2024*

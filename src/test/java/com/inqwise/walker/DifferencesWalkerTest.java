@@ -286,7 +286,6 @@ class DifferencesWalkerTest {
         );
         Differences differences = new Differences(diffList);
         
-        List<String> paths = new ArrayList<>();
         List<Difference> visitedDiffs = new ArrayList<>();
         
         walker.handler(event -> {
@@ -294,11 +293,6 @@ class DifferencesWalkerTest {
             // since DifferencesWalker doesn't set paths for individual Difference objects
             if (event.indicatedObject() instanceof Difference) {
                 visitedDiffs.add((Difference) event.indicatedObject());
-            }
-            
-            String path = (String) event.meta().get(ObjectWalker.Keys.PATH);
-            if (path != null) {
-                paths.add(path);
             }
         });
 
