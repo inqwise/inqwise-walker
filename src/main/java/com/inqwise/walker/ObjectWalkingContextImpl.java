@@ -242,7 +242,9 @@ public class ObjectWalkingContextImpl implements ObjectWalkingContext {
 			while(!ended() && !paused()) {
 			logger.trace("Checking if stack is empty before continuing");
 			checkEmpty();
-				if(!ended() && !stepNext()) {
+				// Check state and manipulate stack atomically
+				boolean shouldEndLevel = !ended() && !stepNext();
+				if(shouldEndLevel) {
 					logger.trace("end level {}", levelIndex());
 					if(!objectWalkStack.isEmpty()) {
 						var walk = objectWalkStack.pop();
