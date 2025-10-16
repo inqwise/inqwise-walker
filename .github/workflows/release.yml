@@ -3,6 +3,9 @@ name: Release
 on:
   release:
     types: [published]
+  push:
+    tags:
+      - 'v*.*.*'
   workflow_dispatch:
     inputs:
       version:
@@ -58,36 +61,45 @@ jobs:
         MAVEN_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
         MAVEN_GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
           
-    - name: Deploy to Maven Central (Tag-based Release)
-      if: github.event_name == 'release'
-      run: mvn clean deploy -P sonatype-oss-release -DskipTests
+    - name: Deploy to Maven Central
+      if: github.event_name == 'release' || github.event_name == 'push'
+      run: |
+        VERSION="${{ steps.get_version.outputs.version }}"
+        git checkout "v$VERSION"
+        mvn clean deploy -P sonatype-oss-release -DskipTests
       env:
         MAVEN_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
         MAVEN_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
         MAVEN_GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
         
+    - name: Extract version from tag
+      id: get_version
+      run: |
+        if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+          VERSION="${{ github.event.inputs.version }}"
+        else
+          # Extract version from tag name (e.g., v1.2.0 -> 1.2.0)
+          VERSION="${GITHUB_REF#refs/tags/v}"
+        fi
+        echo "version=$VERSION" >> $GITHUB_OUTPUT
+        echo "Detected version: $VERSION"
+        
     - name: Prepare Release Assets
       run: |
-        # The Maven release process already built the correct artifacts
-        # We need to find them in the Maven local repository after release:perform
-        VERSION="${{ github.event.inputs.version }}"
-        MAVEN_REPO="$HOME/.m2/repository/com/inqwise/inqwise-walker/$VERSION"
+        VERSION="${{ steps.get_version.outputs.version }}"
+        echo "Building release assets for version: $VERSION"
         
+        # Checkout the release tag to ensure we're building the correct version
+        git checkout "v$VERSION"
+        
+        # Build all artifacts
+        mvn clean package -P sonatype-oss-release -DskipTests
+        
+        # Create release assets directory
         mkdir -p release-assets
         
-        # Copy the release artifacts from Maven local repository
-        if [ -d "$MAVEN_REPO" ]; then
-          cp "$MAVEN_REPO/inqwise-walker-$VERSION.jar" release-assets/ || echo "Main JAR not found"
-          cp "$MAVEN_REPO/inqwise-walker-$VERSION-sources.jar" release-assets/ || echo "Sources JAR not found"
-          cp "$MAVEN_REPO/inqwise-walker-$VERSION-javadoc.jar" release-assets/ || echo "Javadoc JAR not found"
-        else
-          echo "Maven repository directory not found: $MAVEN_REPO"
-          echo "Falling back to building artifacts with correct version"
-          # Checkout the release tag to build the correct version
-          git checkout "v$VERSION"
-          mvn clean package -P sonatype-oss-release -DskipTests
-          cp target/inqwise-walker-*.jar release-assets/
-        fi
+        # Copy artifacts
+        cp target/inqwise-walker-*.jar release-assets/
         
         # List what we actually have
         echo "Release assets prepared:"
@@ -97,21 +109,21 @@ jobs:
         MAVEN_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
         MAVEN_GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
         
-    - name: Create GitHub Release (Manual Trigger)
-      if: github.event_name == 'workflow_dispatch'
+    - name: Create GitHub Release
+      if: github.event_name == 'workflow_dispatch' || github.event_name == 'push'
       uses: softprops/action-gh-release@v2
       with:
-        tag_name: v${{ github.event.inputs.version }}
-        name: Release v${{ github.event.inputs.version }}
+        tag_name: v${{ steps.get_version.outputs.version }}
+        name: Release v${{ steps.get_version.outputs.version }}
         body: |
-          🚀 **Release v${{ github.event.inputs.version }}**
+          🚀 **Release v${{ steps.get_version.outputs.version }}**
           
           ## 📦 Maven Central
           ```xml
           <dependency>
               <groupId>com.inqwise</groupId>
               <artifactId>inqwise-walker</artifactId>
-              <version>${{ github.event.inputs.version }}</version>
+              <version>${{ steps.get_version.outputs.version }}</version>
           </dependency>
           ```
           
@@ -122,7 +134,7 @@ jobs:
           - All artifacts GPG signed
           
           ## 🔗 Links
-          - [Maven Central](https://central.sonatype.com/artifact/com.inqwise/inqwise-walker/${{ github.event.inputs.version }})
+          - [Maven Central](https://central.sonatype.com/artifact/com.inqwise/inqwise-walker/${{ steps.get_version.outputs.version }})
           - [Documentation](https://github.com/inqwise/inqwise-walker#readme)
           
           ---
