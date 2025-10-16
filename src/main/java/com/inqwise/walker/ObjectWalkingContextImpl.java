@@ -1,5 +1,6 @@
 package com.inqwise.walker;
 
+import java.util.ArrayDeque;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -35,7 +36,7 @@ import com.google.common.collect.Sets;
 public class ObjectWalkingContextImpl implements ObjectWalkingContext {
 	private static final Logger logger = LogManager.getLogger(ObjectWalkingContextImpl.class);
 	
-	private Stack<ObjectWalk> objectWalkStack;
+	private ArrayDeque<ObjectWalk> objectWalkStack;
 	private Object object;
 	private boolean ended;
 	private boolean paused;
@@ -59,7 +60,7 @@ public class ObjectWalkingContextImpl implements ObjectWalkingContext {
 	public ObjectWalkingContextImpl(Object object, BiMap<Class<?>, ObjectWalker> walkers, Set<Consumer<ObjectWalkingEvent>> contextEvents) {
 		this.walkers = walkers;
 		this.contextEvents = contextEvents;
-		this.objectWalkStack = new Stack<>();
+		this.objectWalkStack = new ArrayDeque<>();
 		this.object = object;
 		this.endHandlers = Sets.newHashSet();
 	}
@@ -247,8 +248,14 @@ public class ObjectWalkingContextImpl implements ObjectWalkingContext {
 				if(shouldEndLevel) {
 					logger.trace("end level {}", levelIndex());
 					if(!objectWalkStack.isEmpty()) {
-						var walk = objectWalkStack.pop();
-						if(null != walk.exitLevelHandler) {
+						ObjectWalk walk = null;
+						synchronized (objectWalkStack) {
+							if(!objectWalkStack.isEmpty()) {
+								walk = objectWalkStack.pop();
+							}
+						}
+						
+						if(null != walk && null != walk.exitLevelHandler) {
 							walk.exitLevelHandler.accept(null);
 						}
 					}
