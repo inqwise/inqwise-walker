@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	
 	<groupId>com.inqwise</groupId>
 	<artifactId>inqwise-walker</artifactId>
-	<version>1.2.0-SNAPSHOT</version>
+	<version>1.2.0</version>
 	<description>A convenient and powerful object walker for Java, designed to traverse complex object graphs with ease. It provides a simple, event-driven API for navigating nested structures, making it ideal for data processing, validation, and transformation tasks.</description>
 	 <name>Inqwise Walker - Object Walker</name>
 	
@@ -38,7 +36,7 @@
 		<connection>scm:git:https://github.com/inqwise/inqwise-walker.git</connection>
 		<developerConnection>scm:git:https://github.com/inqwise/inqwise-walker.git</developerConnection>
 		<url>https://github.com/inqwise/inqwise-walker</url>
-		<tag>HEAD</tag>
+		<tag>v1.2.0</tag>
 	</scm>
 	
 	<properties>
