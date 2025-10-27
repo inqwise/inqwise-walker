@@ -101,7 +101,7 @@ jobs:
         run: mvn source:jar javadoc:jar -B
 
       - name: Upload build artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: maven-artifacts
           path: |
@@ -172,7 +172,7 @@ jobs:
           fi
 
       - name: Upload OWASP dependency check results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         if: always()
         with:
           name: owasp-dependency-check-report
