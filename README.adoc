@@ -313,17 +313,6 @@ mvn install
 mvn exec:java -Dexec.mainClass="com.inqwise.walker.example.WalkerUsageExample"
 ----
 
-== Dependencies
-
-The library has minimal runtime dependencies:
-
-* **Vert.x Core** (5.0.4) - For JSON processing (provided scope)
-* **Google Guava** (33.4.0-jre) - For collections utilities (provided scope)
-* **Apache Log4j** (2.25.2) - For logging (api required, core provided)
-* **Inqwise Difference** (1.1.6) - For difference processing (provided scope)
-
-Test dependencies include JUnit 5.11.3 and Vert.x test utilities.
-
 == Contributing
 
 We welcome contributions! Please see our link:CONTRIBUTING.md[contributing guidelines] for details on:
