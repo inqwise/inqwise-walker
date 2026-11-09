@@ -52,7 +52,7 @@
 		<jacoco.plugin.version>0.8.16</jacoco.plugin.version>
 		
 		<log4j2.version>2.26.1</log4j2.version>
-		<vertx.version>5.2.2</vertx.version>
+		<vertx.version>5.2.3</vertx.version>
     </properties>
 	
 	<dependencies>
